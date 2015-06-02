@@ -1,0 +1,21 @@
+[0.5.0]
+- Rename to music-parser
+- Add item durations
+- You can sum durations
+- Move to standard js
+- By default uses '_' instead of '/' to extend last item time (you can change it with options)
+
+[0.4.0]
+- Add parenthesis
+
+[0.3.0]
+- if string doesn't contains '|' returns null
+- you can parse measures as array
+- throw exception if not string or array as source
+
+[0.2.0]
+- Add position to the event object
+- Duration is note value (not strings)
+
+[0.1.0]
+- Initial release
