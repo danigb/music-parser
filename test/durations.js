@@ -21,7 +21,7 @@ vows.describe('Parse durations').addBatch({
     'added durations': function () {
       var s = parse('val/q.+8 val/4t+q')
       assert.deepEqual(_.pluck(s, 'value'), ['val', 'val'])
-      assert.deepEqual(_.pluck(s, 'duration'), [0.5, 0.41666666666666663])
+      assert.deepEqual(_.pluck(s, 'duration'), [0.5, 0.41666666666666667])
     },
     'multiple add duration': function () {
       var s = parse('val/1+2+4+4+4+4')

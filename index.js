@@ -3,6 +3,9 @@
 var TimeMeter = require('time-meter')
 var noteDuration = require('note-duration')
 
+// Use ticks internally (to prevent 1/3 + 1/3 + 1/3 == 0.99 )
+var TICKS = 96 * 4
+
 /*
  * parseMeasures
  *
@@ -36,11 +39,16 @@ module.exports = function (measures, time, options) {
 function parseMeasures (meter, measures, options) {
   var events = []
   var position = 0
-  var expectedDur = options.forceDurations ? meter.measure : -1
+  var expectedDur = options.forceDurations ? meter.measure * TICKS : -1
 
   splitMeasures(measures).forEach(function (measure) {
     var list = parenthesize(tokenize(measure), [])
     position = parseList(events, list, position, expectedDur, options)
+  })
+
+  events.forEach(function (event) {
+    event.duration = event.duration / TICKS
+    event.position = event.position / TICKS
   })
   return events
 }
@@ -58,15 +66,15 @@ function parseList (events, list, position, total, options) {
 }
 
 function parseItem (events, item, position, expectedDur, options) {
-  var parsed = options.durationParser(item, expectedDur)
+  var parsed = options.durationParser(item, expectedDur / TICKS)
   var event = parsed ?
-    { value: parsed[0], position: position, duration: parsed[1]} :
+    { value: parsed[0], position: position, duration: parsed[1] * TICKS} :
     { value: item, position: position, duration: expectedDur}
 
-  var rounded = Math.floor(event.position * 10 + 0.001)
-  if (Math.floor(event.position * 10) !== rounded) {
-    event.position = rounded / 10
-  }
+  // var rounded = Math.floor(event.position * 10 + 0.001)
+  // if (Math.floor(event.position * 10) !== rounded) {
+  //   event.position = rounded / 10
+  // }
 
   if (event.value === options.extendSymbol) {
     var last = events[events.length - 1]
