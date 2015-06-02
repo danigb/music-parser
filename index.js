@@ -40,7 +40,6 @@ function parseMeasures (meter, measures, options) {
 
   splitMeasures(measures).forEach(function (measure) {
     var list = parenthesize(tokenize(measure), [])
-    console.log(measure, list, expectedDur)
     position = parseList(events, list, position, expectedDur, options)
   })
   return events
@@ -64,13 +63,18 @@ function parseItem (events, item, position, expectedDur, options) {
     { value: parsed[0], position: position, duration: parsed[1]} :
     { value: item, position: position, duration: expectedDur}
 
+  var rounded = Math.floor(event.position * 10 + 0.001)
+  if (Math.floor(event.position * 10) !== rounded) {
+    event.position = rounded / 10
+  }
+
   if (event.value === options.extendSymbol) {
     var last = events[events.length - 1]
     last.duration += event.duration
   } else {
     events.push(event)
   }
-  return position + event.duration
+  return event.position + event.duration
 }
 
 function parseDuration (item, expectedDur) {

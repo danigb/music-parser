@@ -1,6 +1,7 @@
 [0.5.0]
 - Rename to music-parser
 - Add item durations
+- Round positions
 - You can sum durations
 - Move to standard js
 - By default uses '_' instead of '/' to extend last item time (you can change it with options)
