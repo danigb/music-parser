@@ -40,6 +40,7 @@ function parseMeasures (meter, measures, options) {
 
   splitMeasures(measures).forEach(function (measure) {
     var list = parenthesize(tokenize(measure), [])
+    console.log(measure, list, expectedDur)
     position = parseList(events, list, position, expectedDur, options)
   })
   return events

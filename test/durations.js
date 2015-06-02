@@ -5,7 +5,7 @@ var _ = require('lodash')
 
 var parse = require('../')
 
-vows.describe('Melody parser').addBatch({
+vows.describe('Parse durations').addBatch({
   'duration parsing': {
     'simple duration parsing': function () {
       var s = parse('a2/q c3/e c4/e. b/w f#-2/qt')

@@ -10,10 +10,10 @@ var parse = require('music-parser');
 parse('c/4 d/4 e/8 f/8 f#/8 g/8');
 parse('c/4+4 f/4 g/4 | c/4+4+4+4')
 parse('Cm | Dm7b5 G7 | Am');
-parse('c d (e f g a) | c/4 c#/8 d/8 (e f g)');
+parse('(c d) (e f g a) | c/4 c#/8 d/8 (e f g)');
 ```
 
-It is agnostic about the value of the object. It only take cares about the duration, either with explicit duration (`/4`) or by divide the measure between the number of events. For example, in 4/4 the measure duration is 1 so `parse('a (b (d e)) | c');` returns an array where its durations are: 1/2, 1/4, 1/8, 1/8 and 1 the second measure
+It is agnostic about the value of the object. It only take cares about the duration, either by explicit duration (using `/`) or by dividing the measure length between the number of events.
 
 This is used by [ScoreJS](http://github.com/danigb/scorejs) to parse music.
 
