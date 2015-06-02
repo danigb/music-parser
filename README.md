@@ -3,7 +3,17 @@
 [![Code Climate](https://codeclimate.com/github/danigb/music-parser/badges/gpa.svg)](https://codeclimate.com/github/danigb/music-parser)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
-Parse musical measures with javascript. It takes strings in the form of `'A B | C D'` where `|` means measure separator, and the rest are events. It outputs an array of objects with `value`, `position` and `duration` values. This library is agnostic to the type of events, only cares about position and duration.
+Music notation parser. It takes an string and returns an array of objects with the form `{ value: '', position: 0, duration: 0}`. You can parse durations or measures or a combination of both:
+
+```js
+var parse = require('music-parser');
+parse('c/4 d/4 e/8 f/8 f#/8 g/8');
+parse('c/4+4 f/4 g/4 | c/4+4+4+4')
+parse('Cm | Dm7b5 G7 | Am');
+parse('c d (e f g a) | c/4 c#/8 d/8 (e f g)');
+```
+
+It is agnostic about the value of the object. It only take cares about the duration, either with explicit duration (`/4`) or by divide the measure between the number of events. For example, in 4/4 the measure duration is 1 so `parse('a (b (d e)) | c');` returns an array where its durations are: 1/2, 1/4, 1/8, 1/8 and 1 the second measure
 
 This is used by [ScoreJS](http://github.com/danigb/scorejs) to parse music.
 
@@ -26,35 +36,35 @@ parse('Cm | D0 G7 | Cm');
 //  { value: 'G7', position: 1.5, duration: 0.5  },
 //  { value: 'Cm', position: 2,   duration: 1  }]
 ```
-... or you can pass an array of measures:
+
+You can specify durations:
 
 ```js
-parse(['Cm', 'D7b5 G7', 'Cm'])
+var melody = parse('a2/4 b2/4 c#3/8 d3/8');
+// [{ value: 'a2',  position: 0,      duration: 0.25 },
+//  { value: 'b2',  position: 0.25,   duration: 0.25 },
+//  { value: 'c#3', position: 0.5,    duration: 0.125 },
+//  { value: 'd3',  position: 0.625,  duration: 0.125 }]
 ```
 
-In the string version, the `|` is required. If not present it returns null. If you want to parse only one measure, add a `|` at the end:
+The duration can be expressed with numbers and dots (`"4."`, `"2.."`), with
+letters and dots (`"q."`, `"w.."`) or names (`"quarter"`). See [note-duration](http://github.com/danigb/note-duration)
 
-```js
-parse('a b'); // null
-parse('a b |'); // one measure
-```
-
-The duration of each measure is divided by the number of items inside. You can use parenthesis to change the number of items. Almost all rhythmic structure
-can be written:
+If the duration is not specified, and there's no measure separator, the default duration is 4. But if there are any measure separators, the duration is calculated by dividing the measure length by the number of items. You can use parenthesis to group items and write complex rhythmic structures:
 
 ```js
 parse('a b c d |'); // duration: 0.25, 0.25, 0.25, 0.25
 parse('a (b c)'); // durations: 0.5, 0.25, 0.25
 parse('a b (c d e)'); // durations: q, q, qt, qt, qt
-parse('(a / / b) (c d)') // durations: 0.375, 0.125, 0.25, 0.25
+parse('(a _ _ b) (c d)') // durations: 0.375, 0.125, 0.25, 0.25
 ```
 
-The `/` symbol extends the duration of the previous item:
+The `_` symbol extends the duration of the previous item:
 
 ```js
-parse('Cm | / ');
+parser'Cm | _ ');
 // [{ value: 'Cm', position: 0, duration: 2 }]
-parse('c d / e | f / / g');
+parse('c d _ e | f _ _ g');
 // [{ value: 'c', position: 0,    duration: 0.25 }]
 // [{ value: 'd', position: 0.25, duration: 0.50 }]
 // [{ value: 'e', position: 0.75, duration: 0.25 }]
@@ -72,6 +82,8 @@ parse('C | D / G | C', '3/4');
 ## Dependencies
 
 It uses [time-meter](http://github.com/danigb/time-meter) to time signature operations.
+
+It uses [note-duration](http://github.com/danigb/note-duration) to parse durations.
 
 ## License
 
