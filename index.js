@@ -42,8 +42,11 @@ function parseMeasures (meter, measures, options) {
   var expectedDur = options.forceDurations ? meter.measure * TICKS : -1
 
   splitMeasures(measures).forEach(function (measure) {
-    var list = parenthesize(tokenize(measure), [])
-    position = parseList(events, list, position, expectedDur, options)
+    measure = measure.trim()
+    if (measure.length > 0) { // ignore empty measures
+      var list = parenthesize(tokenize(measure), [])
+      position = parseList(events, list, position, expectedDur, options)
+    }
   })
 
   events.forEach(function (event) {

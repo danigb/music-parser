@@ -1,3 +1,6 @@
+[0.5.1]
+- Ignore empty measures
+
 [0.5.0]
 - Rename to music-parser
 - Add item durations

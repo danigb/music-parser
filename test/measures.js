@@ -24,6 +24,11 @@ vows.describe('Parse measures').addBatch({
     s = parse('b |', '6/8')
     assert.deepEqual(s[0], { value: 'b', position: 0, duration: 0.75 })
   },
+  'empty measures are ignored': function () {
+    var a = parse('a | b')
+    var b = parse('a | | b')
+    assert.deepEqual(a, b)
+  },
   'parse 4/4 measures': function () {
     var s = parse('a | b ')
     assert.equal(s.length, 2)
