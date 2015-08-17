@@ -3,6 +3,8 @@
 [![Code Climate](https://codeclimate.com/github/danigb/music-parser/badges/gpa.svg)](https://codeclimate.com/github/danigb/music-parser)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
+#### This library is now deprecated. Now is part of [danigb/tonal](http://github.com/danigb/tonal) (function score/sequence)
+
 Music notation parser. It takes an string and returns an array of objects with the form `{ value: '', position: 0, duration: 0}`. You can parse durations or measures or a combination of both:
 
 ```js
